@@ -1,0 +1,21 @@
+# Dependencies and generated builds
+node_modules/
+dist/
+public/engine/*.js
+public/engine/*.wasm
+
+# Local state and test output
+artifacts/
+server.log
+.runtime/
+.venv/
+__pycache__/
+.DS_Store
+Thumbs.db
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key

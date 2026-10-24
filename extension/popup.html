@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Chess Coach Sync</title>
+    <style>
+      body {
+        width: 290px;
+        margin: 0;
+        padding: 22px;
+        color: #f1f0e9;
+        background: #182524;
+        font:
+          14px/1.5 system-ui,
+          sans-serif;
+      }
+      h1 {
+        font-size: 20px;
+        margin: 0 0 10px;
+      }
+      p {
+        color: #c1cdca;
+      }
+      button,
+      a {
+        font: inherit;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        border: 0;
+        border-radius: 8px;
+        color: #152420;
+        background: #c4e389;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+      a {
+        color: #c4e389;
+      }
+      #status {
+        min-height: 42px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Chess Coach Board Sync</h1>
+    <p>
+      Send this tab’s visible board and move history to your local analysis
+      tool.
+    </p>
+    <button id="toggle" disabled>Checking tab…</button>
+    <p id="status" role="status"></p>
+    <a href="http://127.0.0.1:4173" target="_blank" rel="noreferrer"
+      >Open Chess Coach ↗</a
+    >
+    <script src="popup.js"></script>
+  </body>
+</html>

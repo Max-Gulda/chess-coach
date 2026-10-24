@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#102b25" />
+    <title>Chess Coach — your analysis room</title>
+  </head>
+  <body>
+    <div id="app">
+      <header class="header">
+        <a class="brand" href="/" aria-label="Chess Coach home"
+          ><span class="brand-mark">♞</span
+          ><span>chess<span class="brand-light">coach</span></span></a
+        >
+        <div class="header-actions">
+          <span id="engine-status" class="engine-status"
+            >Loading Stockfish…</span
+          ><button id="import-open" class="primary">＋ Import game</button>
+        </div>
+      </header>
+      <main>
+        <div class="workspace">
+          <section class="board-column" aria-label="Chess board and navigation">
+            <div class="player-strip">
+              <span class="avatar dark-avatar">♟</span>
+              <div>
+                <strong id="top-player">Black pieces</strong
+                ><small id="top-sub" hidden></small>
+              </div>
+              <button
+                id="flip"
+                class="secondary flip-button"
+                title="Switch between White and Black at the bottom"
+                aria-label="Flip board"
+              >
+                <span aria-hidden="true">⇅</span> Flip board
+              </button>
+            </div>
+            <div class="board-area">
+              <div class="eval-bar" aria-label="Position evaluation">
+                <div id="eval-white"></div>
+                <span id="eval-number">0.0</span>
+              </div>
+              <div
+                id="board"
+                class="board"
+                role="group"
+                aria-label="Chess board"
+              ></div>
+            </div>
+            <div class="player-strip">
+              <span class="avatar">♙</span>
+              <div>
+                <strong id="bottom-player">White pieces</strong
+                ><small id="position-status">White to move</small>
+              </div>
+            </div>
+            <div class="board-toolbar">
+              <button
+                id="start"
+                title="First position"
+                aria-label="First position"
+              >
+                |‹</button
+              ><button
+                id="previous"
+                title="Previous move"
+                aria-label="Previous move"
+              >
+                ‹</button
+              ><span id="move-counter">Starting position</span
+              ><button id="next" title="Next move" aria-label="Next move">
+                ›</button
+              ><button
+                id="end"
+                title="Last position"
+                aria-label="Last position"
+              >
+                ›|
+              </button>
+            </div>
+            <div id="preview-bar" class="preview-bar" hidden>
+              <span>Exploring a suggested line</span
+              ><button id="preview-back" aria-label="Previous variation move">
+                ‹</button
+              ><strong id="preview-step"></strong
+              ><button id="preview-next" aria-label="Next variation move">
+                ›</button
+              ><button id="preview-close">Return to game ↩</button>
+            </div>
+            <details class="board-help">
+              <summary>Board help</summary>
+              <p>
+                Click or drag to move. Use ← → to step through the game. Click a
+                suggested move to explore its line.
+              </p>
+              <p>Scores: + favors White, − favors Black. M means mate.</p>
+            </details>
+            <div class="live-card">
+              <div class="section-heading">
+                <h2>Chess.com extension</h2>
+                <label class="switch"
+                  ><input id="live-enabled" type="checkbox" /><span
+                    >Live sync</span
+                  ></label
+                >
+              </div>
+              <p id="live-status">Not connected.</p>
+              <details>
+                <summary>Connection setup</summary>
+                <ol>
+                  <li>
+                    Open <code>chrome://extensions</code> in Chrome and turn on
+                    Developer mode.
+                  </li>
+                  <li>
+                    Choose <b>Load unpacked</b> and select
+                    <code>extension/dist (inside this project folder)</code>.
+                  </li>
+                  <li>
+                    Open a Chess.com board, click the extension and start
+                    syncing.
+                  </li>
+                  <li>Enable Live sync here. Moves appear automatically.</li>
+                </ol>
+                <p>
+                  Use engine assistance only where permitted, such as bot games
+                  and practice. The extension reads the visible moves; it does
+                  not need your password.
+                </p>
+              </details>
+            </div>
+          </section>
+          <aside class="analysis-column">
+            <section class="panel">
+              <div class="section-heading">
+                <h2>Top moves</h2>
+                <label class="quiet-label"
+                  >Analysis
+                  <select id="think-time" aria-label="Engine analysis time">
+                    <option value="1000">1 sec</option>
+                    <option value="2500" selected>2.5 sec</option>
+                    <option value="6000">6 sec</option>
+                  </select></label
+                >
+              </div>
+              <div class="analysis-meta">
+                <span id="analysis-status">Finding the best continuations…</span
+                ><span title="Positive favors White; negative favors Black."
+                  >+ White / − Black</span
+                >
+              </div>
+              <div id="top-moves" class="top-moves"></div>
+            </section>
+            <details class="panel coach-panel">
+              <summary class="section-heading">
+                <h2>Move explanation</h2>
+                <span id="move-badge" class="badge">—</span>
+              </summary>
+              <div id="insight"><p>Play a move to see its explanation.</p></div>
+            </details>
+            <section class="panel game-panel">
+              <div class="section-heading">
+                <h2>Your game</h2>
+                <div>
+                  <button id="export" class="text-button">Export</button
+                  ><button id="reset" class="text-button">New board</button>
+                </div>
+              </div>
+              <div id="game-title" class="game-title"></div>
+              <div id="history" class="history"></div>
+              <div class="review-controls">
+                <button id="review" class="secondary">Review whole game</button
+                ><span id="review-status"></span>
+              </div>
+            </section>
+          </aside>
+        </div>
+        <footer>Stockfish 19 · Local analysis</footer>
+      </main>
+    </div>
+    <dialog id="import-dialog">
+      <form id="import-form">
+        <div class="section-heading">
+          <h2>Import game</h2>
+          <button
+            type="button"
+            id="import-close"
+            class="icon-button"
+            aria-label="Close import"
+          >
+            ×
+          </button>
+        </div>
+        <p>Paste a PGN game or a FEN position, or choose a PGN file.</p>
+        <textarea
+          id="import-text"
+          rows="10"
+          aria-label="PGN game or FEN position"
+          placeholder='[White "You"]&#10;[Black "Opponent"]&#10;&#10;1. e4 e5 2. Nf3 Nc6…'
+        ></textarea
+        ><input
+          type="file"
+          id="import-file"
+          accept=".pgn,.txt"
+          aria-label="Choose PGN file"
+        />
+        <p id="import-error" class="error" role="alert"></p>
+        <div class="dialog-actions">
+          <button type="button" id="demo" class="secondary">
+            Load example game</button
+          ><button class="primary" type="submit">Load onto board →</button>
+        </div>
+      </form>
+    </dialog>
+    <dialog id="promotion-dialog">
+      <h2>Choose a promotion</h2>
+      <div id="promotion-choices"></div>
+    </dialog>
+    <div id="toast" class="toast" role="status" hidden></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

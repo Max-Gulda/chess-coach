@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Chess Coach Board Sync",
+  "version": "1.0.0",
+  "description": "Send the visible Chess.com board and legal move history to your local Chess Coach.",
+  "permissions": ["storage", "activeTab"],
+  "host_permissions": ["http://127.0.0.1:4173/*"],
+  "background": { "service_worker": "background.js" },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Chess Coach Board Sync"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.chess.com/*", "https://chess.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
